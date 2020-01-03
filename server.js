@@ -2,6 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const router = require('./network/routes');
 
+const db = require('./db');
+db('mongodb://telegrom_admin:123456@127.0.0.1:27017/telegrom');
+
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));

@@ -4,7 +4,8 @@ const controller = require('./controller');
 const router = express.Router();
 
 router.get('/', function (req, res) {
-  controller.getMessages()
+  const filterMessages = req.query.user || null;
+  controller.getMessages(filterMessages)
     .then((messageList) => {
       response.success(req, res, messageList, 201);
     })
@@ -23,6 +24,28 @@ router.post('/', function (req, res) {
     })
     .catch((error) => {
       response.error(req, res, error, 400);
+    });
+});
+
+router.patch('/:id', function (req, res) {
+  console.log('req.params.id ', req.params.id);
+  controller.updateMessage(req.params.id, req.body.text)
+    .then((updatedMessage) => {
+      response.success(req, res, updatedMessage, 200);
+    })
+    .catch((error) => {
+      response.error(req, res, 'Error interno', 500, error);
+    });
+});
+
+router.delete('/:id', function (req, res) {
+  console.log('req.params.id ', req.params.id);
+  controller.deleteMessage(req.params.id)
+    .then(() => {
+      response.success(req, res, `Mensaje ${req.params.id} elimininado`, 200);
+    })
+    .catch((error) => {
+      response.error(req, res, 'Error interno', 500, error);
     });
 });
 
